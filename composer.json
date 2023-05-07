@@ -21,7 +21,6 @@
     "orchestra/testbench": "^8.5",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpunit/phpunit": "^10.0",
-    "predis/predis": "^2.1",
     "psalm/plugin-laravel": "^2.8",
     "roave/security-advisories": "dev-latest",
     "slevomat/coding-standard": "^8.11",

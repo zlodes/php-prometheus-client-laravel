@@ -82,11 +82,9 @@ jobs:
     services:
       redis:
         image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        ports:
+          - 6379/tcp
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout Code
@@ -99,8 +97,6 @@ jobs:
         uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml

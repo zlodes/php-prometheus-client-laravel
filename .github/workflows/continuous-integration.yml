@@ -87,7 +87,7 @@ jobs:
         uses: php-actions/composer@v6
 
       - name: Start Redis
-        uses: supercharge/redis-github-action@1.5.0s
+        uses: supercharge/redis-github-action@1.5.0
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3

@@ -81,10 +81,17 @@ jobs:
 
     services:
       redis:
-        image: redis
+        image: bitnami/redis:6.2.4-debian-10-r35
         ports:
-          - 6379/tcp
-        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 6379:6379
+        env:
+          ALLOW_EMPTY_PASSWORD: 'yes'
+        options: >-
+          --health-cmd "redis-cli -p 6379 ping"
+          --health-start-period 5s
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout Code
@@ -97,6 +104,7 @@ jobs:
         uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
+          REDIS_HOST: redis
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml

@@ -21,6 +21,7 @@
     "orchestra/testbench": "^8.5",
     "phpcompatibility/php-compatibility": "^9.3",
     "phpunit/phpunit": "^10.0",
+    "predis/predis": "^2.1",
     "psalm/plugin-laravel": "^2.8",
     "roave/security-advisories": "dev-latest",
     "slevomat/coding-standard": "^8.11",
@@ -45,6 +46,13 @@
     },
     "sort-packages": true
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Zlodes\\PrometheusExporter\\Laravel\\ServiceProvider"
+      ]
+    }
+  },
   "scripts": {
     "phpcs": "./vendor/bin/phpcs -p src",
     "psalm": "./vendor/bin/psalm --show-info=true",
@@ -53,12 +61,5 @@
       "@putenv XDEBUG_MODE=coverage",
       "@test"
     ]
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Zlodes\\PrometheusExporter\\Laravel\\ServiceProvider"
-      ]
-    }
   }
 }

@@ -72,7 +72,7 @@ class DummyController
 }
 ```
 
-> **Info**
+> **Note**
 > For further details, see [zlodes/prometheus-exporter](https://github.com/zlodes/php-prometheus-exporter)
 
 

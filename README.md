@@ -1,6 +1,6 @@
 # PHP Prometheus Exporter for Laravel
 
-[//]: # (TODO: CODECOV)
+[![codecov](https://codecov.io/gh/zlodes/php-prometheus-exporter-laravel/branch/master/graph/badge.svg?token=JYPUW0UYT5)](https://codecov.io/gh/zlodes/php-prometheus-exporter-laravel)
 
 This is a Laravel adapter/bridge package for [zlodes/prometheus-exporter](https://github.com/zlodes/php-prometheus-exporter).
 

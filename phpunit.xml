@@ -27,8 +27,4 @@
             <text outputFile="php://stdout" />
         </report>
     </coverage>
-
-    <php>
-        <env name="REDIS_HOST" value="127.0.0.1" />
-    </php>
 </phpunit>

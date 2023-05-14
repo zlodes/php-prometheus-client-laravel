@@ -93,9 +93,12 @@ $this->callAfterResolving(
 
 ### Available console commands
 
-```shell
-php declare 
-```
+| Command                     | Description                                    |
+|-----------------------------|------------------------------------------------|
+| `php artisan metrics:list`  | Lists all registered metrics                   |
+| `php artisan metrics:clear` | Clears metrics storage                         |
+| `metrics:collect-scheduled` | Runs `ScheduledCollectors`. Using by Scheduler |
+
 
 ## Roadmap
 

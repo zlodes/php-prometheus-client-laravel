@@ -13,9 +13,9 @@ Now supports only Counter and Gauge metric types.
 
 ### Installation 
 
- ```shell
-   composer require zlodes/prometheus-exporter-laravel
-   ```
+```shell
+composer require zlodes/prometheus-exporter-laravel
+```
 
 ### Register a route for the metrics controller
 
@@ -40,25 +40,6 @@ By-default, it uses [RedisStorage](src/Storage/RedisStorage.php). If you want to
    php artisan vendor:publish --tag=prometheus-exporter
    ```
 3. Set your `storage` class in the config.
-
-
-
-1. Install it via Composer:
-  
-2. Register a route for [MetricsExporterController](src/Http/MetricsExporterController.php)
-3. Configure a `Storage`. It uses a Redis by default. **[Optional]**
-4. 
-
-## Configuration
-
-### Metrics route (required)
-
-Your application is responsible for metrics route registration. There is a ready to use [controller](src/Http/MetricsExporterController.php). You can configure groups, middleware or prefixes as you want.
-
-
-
-### Storage (optional)
-
 
 
 ## Metrics registration

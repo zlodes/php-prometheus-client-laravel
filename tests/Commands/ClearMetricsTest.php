@@ -9,7 +9,7 @@ use Orchestra\Testbench\TestCase;
 use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
-class FlushMetricsTest extends TestCase
+class ClearMetricsTest extends TestCase
 {
     public function testCommandRun(): void
     {
@@ -19,10 +19,10 @@ class FlushMetricsTest extends TestCase
         );
 
         $storageMock
-            ->expects('flush');
+            ->expects('clear');
 
         $this
-            ->artisan('metrics:flush')
+            ->artisan('metrics:clear')
             ->assertSuccessful();
     }
 

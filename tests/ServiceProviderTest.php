@@ -7,7 +7,6 @@ namespace Zlodes\PrometheusExporter\Laravel\Tests;
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Orchestra\Testbench\TestCase;
-use Zlodes\PrometheusExporter\Collector\Collector;
 use Zlodes\PrometheusExporter\Exporter\Exporter;
 use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
 use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
@@ -21,7 +20,6 @@ class ServiceProviderTest extends TestCase
     public function testBindings(): void
     {
         $interfaces = [
-            Collector::class,
             Storage::class,
             Registry::class,
             Exporter::class,

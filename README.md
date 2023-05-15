@@ -104,6 +104,7 @@ $this->callAfterResolving(
 
 - [x] Scheduled Collectors by config
 - [x] Document Scheduled collectors
+- [ ] Convert the roadmap to issues and create a milestone 1.0.0
 - [ ] Ability to disable Scheduled tasks
 - [ ] Configure Semantic Release for GitHub Actions
 

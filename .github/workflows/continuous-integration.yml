@@ -102,6 +102,8 @@ jobs:
 
       - name: Install composer and dependencies
         uses: php-actions/composer@v6
+        with:
+          php_extensions: redis
 
       - name: Start Redis
         uses: supercharge/redis-github-action@1.5.0

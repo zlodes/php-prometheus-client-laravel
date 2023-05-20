@@ -6,15 +6,13 @@ namespace Zlodes\PrometheusExporter\Laravel\Storage;
 
 use Exception;
 use Illuminate\Contracts\Redis\Connection;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
+use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
 use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
-use Zlodes\PrometheusExporter\Normalization\Exceptions\CannotDenormalizeMetricsKey;
-use Zlodes\PrometheusExporter\Normalization\Exceptions\CannotNormalizeMetricsKey;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyNormalizer;
+use Zlodes\PrometheusExporter\KeySerialization\JsonSerializer;
+use Zlodes\PrometheusExporter\KeySerialization\Serializer;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
 final class RedisStorage implements Storage
@@ -23,8 +21,7 @@ final class RedisStorage implements Storage
 
     public function __construct(
         private readonly Connection $connection,
-        private readonly MetricKeyNormalizer $metricKeyNormalizer = new JsonMetricKeyNormalizer(),
-        private readonly MetricKeyDenormalizer $metricKeyDenormalizer = new JsonMetricKeyDenormalizer(),
+        private readonly Serializer $serializer = new JsonSerializer(),
     ) {
     }
 
@@ -42,15 +39,15 @@ final class RedisStorage implements Storage
 
         $results = [];
 
-        foreach ($rawHash as $denormalizedKey => $value) {
+        foreach ($rawHash as $serializedKey => $value) {
             try {
                 $results[] = new MetricValue(
-                    $this->metricKeyNormalizer->normalize($denormalizedKey),
+                    $this->serializer->unserialize($serializedKey),
                     (float) $value
                 );
-            } catch (CannotNormalizeMetricsKey $e) {
+            } catch (MetricKeyUnserializationException $e) {
                 throw new StorageReadException(
-                    "Got fetch error. Cannot normalize metrics key for key: $denormalizedKey",
+                    "Got fetch error. Cannot unserialize metrics key for key: $serializedKey",
                     previous: $e
                 );
             }
@@ -74,10 +71,10 @@ final class RedisStorage implements Storage
     public function setValue(MetricValue $value): void
     {
         try {
-            $key = $this->metricKeyDenormalizer->denormalize($value->metricNameWithLabels);
-        } catch (CannotDenormalizeMetricsKey $e) {
+            $key = $this->serializer->serialize($value->metricNameWithLabels);
+        } catch (MetricKeySerializationException $e) {
             throw new StorageWriteException(
-                "Got setValue error. Cannot denormalize metrics key",
+                "Got setValue error. Cannot serialize metrics key",
                 previous: $e
             );
         }
@@ -95,10 +92,10 @@ final class RedisStorage implements Storage
     public function incrementValue(MetricValue $value): void
     {
         try {
-            $key = $this->metricKeyDenormalizer->denormalize($value->metricNameWithLabels);
-        } catch (CannotDenormalizeMetricsKey $e) {
+            $key = $this->serializer->serialize($value->metricNameWithLabels);
+        } catch (MetricKeySerializationException $e) {
             throw new StorageWriteException(
-                "Got incrementValue error. Cannot denormalize metrics key",
+                "Got incrementValue error. Cannot serialize metrics key",
                 previous: $e
             );
         }

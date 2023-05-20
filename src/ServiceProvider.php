@@ -11,16 +11,14 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Webmozart\Assert\Assert;
 use Zlodes\PrometheusExporter\Exporter\Exporter;
 use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusExporter\KeySerialization\JsonSerializer;
+use Zlodes\PrometheusExporter\KeySerialization\Serializer;
 use Zlodes\PrometheusExporter\Laravel\Commands\ClearMetrics;
 use Zlodes\PrometheusExporter\Laravel\Commands\ListMetrics;
 use Zlodes\PrometheusExporter\Laravel\Commands\ScheduledCollect;
 use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollector;
 use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
 use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\JsonMetricKeyNormalizer;
 use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\Storage;
@@ -34,8 +32,7 @@ final class ServiceProvider extends BaseServiceProvider
         $this->app->singleton(Registry::class, ArrayRegistry::class);
         $this->app->singleton(Exporter::class, StoredMetricsExporter::class);
 
-        $this->app->singleton(MetricKeyNormalizer::class, JsonMetricKeyNormalizer::class);
-        $this->app->singleton(MetricKeyDenormalizer::class, JsonMetricKeyDenormalizer::class);
+        $this->app->singleton(Serializer::class, JsonSerializer::class);
 
         $this->registerStorage();
         $this->registerSchedulableCollectors();

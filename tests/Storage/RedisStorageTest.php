@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Laravel\Tests\Storage;
 
-use Exception;
 use Illuminate\Contracts\Redis\Connection;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Orchestra\Testbench\TestCase;
 use RedisException;
 use RuntimeException;
-use Zlodes\PrometheusExporter\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\DTO\MetricValue;
+use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
 use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
 use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
+use Zlodes\PrometheusExporter\KeySerialization\Serializer;
 use Zlodes\PrometheusExporter\Laravel\Storage\RedisStorage;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
-use Zlodes\PrometheusExporter\Normalization\Exceptions\CannotDenormalizeMetricsKey;
-use Zlodes\PrometheusExporter\Normalization\Exceptions\CannotNormalizeMetricsKey;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
 use Zlodes\PrometheusExporter\Storage\StorageTesting;
 
 class RedisStorageTest extends TestCase
@@ -48,7 +46,7 @@ class RedisStorageTest extends TestCase
     {
         $storage = new RedisStorage(
             $connectionMock = Mockery::mock(Connection::class),
-            $keyNormalizerMock = Mockery::mock(MetricKeyNormalizer::class),
+            serializer: $serializerMock = Mockery::mock(Serializer::class),
         );
 
         $connectionMock
@@ -58,13 +56,13 @@ class RedisStorageTest extends TestCase
                 'foo' => 42,
             ]);
 
-        $keyNormalizerMock
-            ->expects('normalize')
+        $serializerMock
+            ->expects('unserialize')
             ->with('foo')
-            ->andThrow(new CannotNormalizeMetricsKey('Something went wrong'));
+            ->andThrow(new MetricKeyUnserializationException('Something went wrong'));
 
         $this->expectException(StorageReadException::class);
-        $this->expectExceptionMessage('Cannot normalize metrics key for key: foo');
+        $this->expectExceptionMessage('Cannot unserialize metrics key for key: foo');
 
         $storage->fetch();
     }
@@ -105,15 +103,15 @@ class RedisStorageTest extends TestCase
     {
         $storage = new RedisStorage(
             Mockery::mock(Connection::class),
-            metricKeyDenormalizer: $keyDenormalizerMock = Mockery::mock(MetricKeyDenormalizer::class),
+            serializer: $serializerMock = Mockery::mock(Serializer::class),
         );
 
-        $keyDenormalizerMock
-            ->expects('denormalize')
-            ->andThrow(new CannotDenormalizeMetricsKey('Something went wrong'));
+        $serializerMock
+            ->expects('serialize')
+            ->andThrow(new MetricKeySerializationException('Something went wrong'));
 
         $this->expectException(StorageWriteException::class);
-        $this->expectExceptionMessage('Cannot denormalize metrics key');
+        $this->expectExceptionMessage('Cannot serialize metrics key');
 
         $storage->incrementValue(new MetricValue(
             new MetricNameWithLabels('foo', []),
@@ -145,15 +143,15 @@ class RedisStorageTest extends TestCase
     {
         $storage = new RedisStorage(
             Mockery::mock(Connection::class),
-            metricKeyDenormalizer: $keyDenormalizerMock = Mockery::mock(MetricKeyDenormalizer::class),
+            serializer: $serializerMock = Mockery::mock(Serializer::class),
         );
 
-        $keyDenormalizerMock
-            ->expects('denormalize')
-            ->andThrow(new CannotDenormalizeMetricsKey('Something went wrong'));
+        $serializerMock
+            ->expects('serialize')
+            ->andThrow(new MetricKeySerializationException('Something went wrong'));
 
         $this->expectException(StorageWriteException::class);
-        $this->expectExceptionMessage('Cannot denormalize metrics key');
+        $this->expectExceptionMessage('Cannot serialize metrics key');
 
         $storage->setValue(new MetricValue(
             new MetricNameWithLabels('foo', []),

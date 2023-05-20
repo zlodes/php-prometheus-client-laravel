@@ -8,10 +8,9 @@ use Illuminate\Console\Scheduling\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Orchestra\Testbench\TestCase;
 use Zlodes\PrometheusExporter\Exporter\Exporter;
+use Zlodes\PrometheusExporter\KeySerialization\Serializer;
 use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
 use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyDenormalizer;
-use Zlodes\PrometheusExporter\Normalization\Contracts\MetricKeyNormalizer;
 use Zlodes\PrometheusExporter\Registry\Registry;
 use Zlodes\PrometheusExporter\Storage\Storage;
 
@@ -23,8 +22,7 @@ class ServiceProviderTest extends TestCase
             Storage::class,
             Registry::class,
             Exporter::class,
-            MetricKeyNormalizer::class,
-            MetricKeyDenormalizer::class,
+            Serializer::class,
             SchedulableCollectorArrayRegistry::class,
         ];
 

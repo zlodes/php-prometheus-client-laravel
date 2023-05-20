@@ -14,13 +14,14 @@
     "ext-redis": "*",
     "laravel/framework": "^9.0 || ^10.0",
     "webmozart/assert": "^1.11",
-    "zlodes/prometheus-exporter": "^0.3.0"
+    "zlodes/prometheus-exporter": "^0.5.0"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",
     "mockery/mockery": "^1.5",
     "orchestra/testbench": "^8.5",
     "phpcompatibility/php-compatibility": "^9.3",
+    "phpmd/phpmd": "^2.13",
     "phpunit/phpunit": "^10.0",
     "psalm/plugin-laravel": "^2.8",
     "roave/security-advisories": "dev-latest",
@@ -57,9 +58,11 @@
     "full-check": [
       "@phpcs",
       "@psalm",
+      "@phpmd",
       "@test:coverage"
     ],
     "phpcs": "./vendor/bin/phpcs -p src",
+    "phpmd": "./vendor/bin/phpmd src text phpmd.xml",
     "psalm": "./vendor/bin/psalm --show-info=true",
     "test": "./vendor/bin/phpunit",
     "test:coverage": [

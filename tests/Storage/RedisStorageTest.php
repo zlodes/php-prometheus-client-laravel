@@ -25,6 +25,16 @@ class RedisStorageTest extends TestCase
     use StorageTesting;
     use MockeryPHPUnitIntegration;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var Connection $redis */
+        $redis = $this->app->make(Connection::class);
+
+        $redis->command('FLUSHALL');
+    }
+
     public function testRedisExceptionWhileFetch(): void
     {
         $storage = new RedisStorage(
@@ -39,7 +49,7 @@ class RedisStorageTest extends TestCase
         $this->expectException(StorageReadException::class);
         $this->expectExceptionMessage('Cannot execute HGETALL command');
 
-        $storage->fetch();
+        iterator_to_array($storage->fetch());
     }
 
     public function testNormalizationExceptionWhileFetch(): void
@@ -64,7 +74,7 @@ class RedisStorageTest extends TestCase
         $this->expectException(StorageReadException::class);
         $this->expectExceptionMessage('Cannot unserialize metrics key for key: foo');
 
-        $storage->fetch();
+        iterator_to_array($storage->fetch());
     }
 
     public function testExceptionWhileFetch(): void
@@ -80,7 +90,7 @@ class RedisStorageTest extends TestCase
 
         $this->expectException(StorageReadException::class);
 
-        $storage->fetch();
+        iterator_to_array($storage->fetch());
     }
 
     public function testExceptionWhileClear(): void
@@ -113,10 +123,12 @@ class RedisStorageTest extends TestCase
         $this->expectException(StorageWriteException::class);
         $this->expectExceptionMessage('Cannot serialize metrics key');
 
-        $storage->incrementValue(new MetricValue(
-            new MetricNameWithLabels('foo', []),
-            1,
-        ));
+        $storage->incrementValue(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1,
+            )
+        );
     }
 
     public function testRedisExceptionWhileIncrementingValue(): void
@@ -133,10 +145,12 @@ class RedisStorageTest extends TestCase
         $this->expectException(StorageWriteException::class);
         $this->expectExceptionMessage('Cannot execute HINCRBYFLOAT command');
 
-        $storage->incrementValue(new MetricValue(
-            new MetricNameWithLabels('foo', []),
-            1,
-        ));
+        $storage->incrementValue(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1,
+            )
+        );
     }
 
     public function testDenormalizationExceptionWhileSettingValue(): void
@@ -153,10 +167,12 @@ class RedisStorageTest extends TestCase
         $this->expectException(StorageWriteException::class);
         $this->expectExceptionMessage('Cannot serialize metrics key');
 
-        $storage->setValue(new MetricValue(
-            new MetricNameWithLabels('foo', []),
-            1,
-        ));
+        $storage->setValue(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1,
+            )
+        );
     }
 
     public function testRedisExceptionWhileSettingValue(): void
@@ -173,10 +189,132 @@ class RedisStorageTest extends TestCase
         $this->expectException(StorageWriteException::class);
         $this->expectExceptionMessage('Cannot execute HSET command');
 
-        $storage->setValue(new MetricValue(
-            new MetricNameWithLabels('foo', []),
-            1,
-        ));
+        $storage->setValue(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1,
+            )
+        );
+    }
+
+    public function testStorageWriteExceptionWhilePersistingOfHistogram(): void
+    {
+        $storage = new RedisStorage(
+            Mockery::mock(Connection::class),
+            $serializerMock = Mockery::mock(Serializer::class),
+        );
+
+        $serializerMock
+            ->expects('serialize')
+            ->andThrow(new MetricKeySerializationException('Something went wrong'));
+
+        $this->expectException(StorageWriteException::class);
+        $this->expectExceptionMessage('Cannot serialize metric key');
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('foo', []),
+                1,
+            ),
+            [0.1, 0.2],
+        );
+    }
+
+    public function testUnserializationExceptionWhileFetchingHistograms(): void
+    {
+        $storage = new RedisStorage(
+            $connectionMock = Mockery::mock(Connection::class),
+            $serializerMock = Mockery::mock(Serializer::class),
+        );
+
+        $connectionMock
+            ->allows('command')
+            ->with('HGETALL', Mockery::any())
+            ->andReturnUsing(static function (string $command, array $args) {
+                $data = [
+                    'metrics_histograms_sum' => [
+                        'non-unserializable-key' => 10,
+                    ],
+                ];
+
+                $key = $args[0];
+                return $data[$key] ?? [];
+            });
+
+        $serializerMock
+            ->expects('unserialize')
+            ->with('non-unserializable-key')
+            ->andThrow(new MetricKeyUnserializationException('Something went wrong'));
+
+
+        $this->expectException(StorageReadException::class);
+        $this->expectExceptionMessage('Cannot unserialize metrics key for key: non-unserializable-key');
+
+        iterator_to_array($storage->fetch(), false);
+    }
+
+    public function testRedisExceptionWhileFetchingHistogramBuckets(): void
+    {
+        $storage = new RedisStorage(
+            $connectionMock = Mockery::mock(Connection::class),
+        );
+
+        // First call to HGETALL from fetchGaugeAndCounterMetrics
+        $connectionMock
+            ->expects('command')
+            ->with('HGETALL', [RedisStorage::SIMPLE_HASH_NAME])
+            ->andReturn([]);
+
+        // Second call to HGETALL from fetchHistogramMetrics (sum)
+        $connectionMock
+            ->expects('command')
+            ->with('HGETALL', [RedisStorage::HISTOGRAM_SUM_HASH_NAME])
+            ->andReturn([
+                'foo' => 10,
+            ]);
+
+        // Third call to HGETALL from fetchHistogramMetrics (count)
+        $connectionMock
+            ->expects('command')
+            ->with('HGETALL', [RedisStorage::HISTOGRAM_COUNT_HASH_NAME])
+            ->andReturn([
+                'foo' => 2,
+            ]);
+
+        // Fourth call to HGETALL from fetchHistogramMetrics (buckets)
+        $connectionMock
+            ->expects('command')
+            ->with('HGETALL', [RedisStorage::HISTOGRAM_HASH_NAME_PREFIX . 'foo'])
+            ->andThrow(new RedisException('Something went wrong'));
+
+        $this->expectException(StorageReadException::class);
+        $this->expectExceptionMessage('Cannot execute HGETALL command');
+
+        iterator_to_array($storage->fetch(), false);
+    }
+
+    public function testStorageReadExceptionWhileFetchingHistograms(): void
+    {
+        $storage = new RedisStorage(
+            $connectionMock = Mockery::mock(Connection::class),
+        );
+
+        // First call to HGETALL from fetchGaugeAndCounterMetrics
+        $connectionMock
+            ->expects('command')
+            ->with('HGETALL', [RedisStorage::SIMPLE_HASH_NAME])
+            ->andReturn([]);
+
+        // Second call to HGETALL from fetchHistogramMetrics
+        $connectionMock
+            ->expects('command')
+            ->with('HGETALL', [RedisStorage::HISTOGRAM_SUM_HASH_NAME])
+            ->andThrow(new RedisException('Something went wrong'));
+
+        $this->expectException(StorageReadException::class);
+        $this->expectExceptionMessage('Cannot execute HGETALL command');
+
+        iterator_to_array($storage->fetch(), false);
     }
 
     private function createStorage(): RedisStorage

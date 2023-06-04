@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusExporter\Laravel\Tests\Commands;
 
-use EmptyIterator;
 use Generator;
 use Mockery;
 use Orchestra\Testbench\TestCase;
@@ -23,7 +22,7 @@ class ListMetricsTest extends TestCase
 
         $registryMock
             ->expects('getAll')
-            ->andReturn(new EmptyIterator());
+            ->andReturn([]);
 
         $this
             ->artisan('metrics:list')
@@ -39,12 +38,11 @@ class ListMetricsTest extends TestCase
 
         $registryMock
             ->expects('getAll')
-            ->andReturnUsing(static function (): Generator {
-                yield new Counter('foo', 'help');
-                yield new Counter('bar', 'help');
-                yield new Counter('baz', 'help');
-            });
-
+            ->andReturn([
+                new Counter('foo', 'help'),
+                new Counter('bar', 'help'),
+                new Counter('baz', 'help'),
+            ]);
         $this
             ->artisan('metrics:list')
             ->assertSuccessful();

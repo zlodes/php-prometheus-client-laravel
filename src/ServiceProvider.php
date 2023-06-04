@@ -81,12 +81,11 @@ final class ServiceProvider extends BaseServiceProvider
                 /** @var Repository $config */
                 $config = $app->make(Repository::class);
 
-                /** @psalm-var list<class-string<SchedulableCollector>> $storageClass */
+                /** @psalm-var list<class-string<SchedulableCollector>> $collectors */
                 $collectors = $config->get('prometheus-exporter.schedulable_collectors');
                 Assert::allStringNotEmpty($collectors);
 
                 foreach ($collectors as $collectorClass) {
-                    /** @psalm-var class-string<Storage> $storageClass */
                     Assert::true(
                         is_a($collectorClass, SchedulableCollector::class, true),
                         "$collectorClass isn't a valid SchedulableCollector"

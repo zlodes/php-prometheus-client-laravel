@@ -9,3 +9,4 @@
 /psalm.xml          export-ignore
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
+/phpstan.neon       export-ignore

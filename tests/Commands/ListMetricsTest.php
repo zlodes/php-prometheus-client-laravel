@@ -8,7 +8,7 @@ use Generator;
 use Mockery;
 use Orchestra\Testbench\TestCase;
 use Zlodes\PrometheusClient\Laravel\ServiceProvider;
-use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\Metric\Counter;
 use Zlodes\PrometheusClient\Registry\Registry;
 
 class ListMetricsTest extends TestCase

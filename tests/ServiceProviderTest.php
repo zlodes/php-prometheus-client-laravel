@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests;
+namespace Zlodes\PrometheusClient\Laravel\Tests;
 
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Console\Scheduling\Schedule;
 use Orchestra\Testbench\TestCase;
-use Zlodes\PrometheusExporter\Exporter\Exporter;
-use Zlodes\PrometheusExporter\KeySerialization\Serializer;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
-use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
-use Zlodes\PrometheusExporter\Registry\Registry;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Exporter\Exporter;
+use Zlodes\PrometheusClient\KeySerialization\Serializer;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
+use Zlodes\PrometheusClient\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 class ServiceProviderTest extends TestCase
 {

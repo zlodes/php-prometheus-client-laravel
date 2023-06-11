@@ -7,11 +7,11 @@ return [
      * Here you can configure a Storage for metrics
      *
      * Available options:
-     * - \Zlodes\PrometheusExporter\Storage\InMemoryStorage::class
-     * - \Zlodes\PrometheusExporter\Laravel\Storage\RedisStorage::class
+     * - \Zlodes\PrometheusClient\Storage\InMemoryStorage::class
+     * - \Zlodes\PrometheusClient\Laravel\Storage\RedisStorage::class
      * - Your own storage implements Storage interface
      */
-    'storage' => \Zlodes\PrometheusExporter\Laravel\Storage\RedisStorage::class,
+    'storage' => \Zlodes\PrometheusClient\Laravel\Storage\RedisStorage::class,
 
     /**
      * Here you can specify a list of your SchedulableCollectors

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\Commands;
+namespace Zlodes\PrometheusClient\Laravel\Tests\Commands;
 
 use Mockery;
 use Orchestra\Testbench\TestCase;
-use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 class ClearMetricsTest extends TestCase
 {

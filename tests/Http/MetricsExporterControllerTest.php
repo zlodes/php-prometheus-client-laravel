@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\Http;
+namespace Zlodes\PrometheusClient\Laravel\Tests\Http;
 
 use Generator;
 use Illuminate\Support\Facades\Route;
 use Mockery;
 use Orchestra\Testbench\TestCase;
-use Zlodes\PrometheusExporter\Exporter\Exporter;
-use Zlodes\PrometheusExporter\Laravel\Http\MetricsExporterController;
-use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\Exporter\Exporter;
+use Zlodes\PrometheusClient\Laravel\Http\MetricsExporterController;
+use Zlodes\PrometheusClient\Laravel\ServiceProvider;
 
 class MetricsExporterControllerTest extends TestCase
 {

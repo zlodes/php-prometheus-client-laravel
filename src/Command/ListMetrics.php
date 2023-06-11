@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Commands;
+namespace Zlodes\PrometheusClient\Laravel\Command;
 
 use Illuminate\Console\Command;
 use JsonException;
-use Zlodes\PrometheusExporter\Registry\Registry;
+use Zlodes\PrometheusClient\Registry\Registry;
 
 final class ListMetrics extends Command
 {

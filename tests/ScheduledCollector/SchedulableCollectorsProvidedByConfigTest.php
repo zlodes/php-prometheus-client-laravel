@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\ScheduledCollector;
+namespace Zlodes\PrometheusClient\Laravel\Tests\ScheduledCollector;
 
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Orchestra\Testbench\TestCase;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
-use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
-use Zlodes\PrometheusExporter\Laravel\Tests\Dummy\DummySchedulableCollector;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
+use Zlodes\PrometheusClient\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\Laravel\Tests\Dummy\DummySchedulableCollector;
 
 final class SchedulableCollectorsProvidedByConfigTest extends TestCase
 {

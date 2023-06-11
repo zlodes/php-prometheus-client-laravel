@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Commands;
+namespace Zlodes\PrometheusClient\Laravel\Command;
 
 use Illuminate\Console\Command;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 final class ClearMetrics extends Command
 {

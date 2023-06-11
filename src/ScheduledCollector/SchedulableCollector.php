@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\ScheduledCollector;
+namespace Zlodes\PrometheusClient\Laravel\ScheduledCollector;
 
-use Zlodes\PrometheusExporter\Laravel\Exceptions\CannotCollectScheduledMetrics;
+use Zlodes\PrometheusClient\Laravel\Exception\CannotCollectScheduledMetrics;
 
 interface SchedulableCollector
 {

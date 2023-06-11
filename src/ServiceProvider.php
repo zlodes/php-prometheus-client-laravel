@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel;
+namespace Zlodes\PrometheusClient\Laravel;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Webmozart\Assert\Assert;
-use Zlodes\PrometheusExporter\Exporter\Exporter;
-use Zlodes\PrometheusExporter\Exporter\StoredMetricsExporter;
-use Zlodes\PrometheusExporter\KeySerialization\JsonSerializer;
-use Zlodes\PrometheusExporter\KeySerialization\Serializer;
-use Zlodes\PrometheusExporter\Laravel\Commands\ClearMetrics;
-use Zlodes\PrometheusExporter\Laravel\Commands\ListMetrics;
-use Zlodes\PrometheusExporter\Laravel\Commands\ScheduledCollect;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollector;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
-use Zlodes\PrometheusExporter\Registry\ArrayRegistry;
-use Zlodes\PrometheusExporter\Registry\Registry;
-use Zlodes\PrometheusExporter\Storage\Storage;
+use Zlodes\PrometheusClient\Exporter\Exporter;
+use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
+use Zlodes\PrometheusClient\KeySerialization\Serializer;
+use Zlodes\PrometheusClient\Laravel\Command\ClearMetrics;
+use Zlodes\PrometheusClient\Laravel\Command\ListMetrics;
+use Zlodes\PrometheusClient\Laravel\Command\ScheduledCollect;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollector;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
+use Zlodes\PrometheusClient\Registry\ArrayRegistry;
+use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\Storage;
 
 final class ServiceProvider extends BaseServiceProvider
 {

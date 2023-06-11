@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\Commands;
+namespace Zlodes\PrometheusClient\Laravel\Tests\Commands;
 
 use Mockery;
 use Orchestra\Testbench\TestCase;
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusExporter\Collector\Collector;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
-use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
-use Zlodes\PrometheusExporter\Laravel\Tests\Dummy\DummySchedulableCollector;
+use Zlodes\PrometheusClient\Collector\Collector;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
+use Zlodes\PrometheusClient\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\Laravel\Tests\Dummy\DummySchedulableCollector;
 
 class ScheduledCollectTest extends TestCase
 {

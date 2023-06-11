@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Commands;
+namespace Zlodes\PrometheusClient\Laravel\Command;
 
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Foundation\Application;
 use Psr\Log\LoggerInterface;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollector;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollector;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
 
 final class ScheduledCollect extends Command
 {

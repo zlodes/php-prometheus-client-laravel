@@ -2,12 +2,7 @@
 
 [![codecov](https://codecov.io/gh/zlodes/php-prometheus-exporter-laravel/branch/master/graph/badge.svg?token=JYPUW0UYT5)](https://codecov.io/gh/zlodes/php-prometheus-exporter-laravel)
 
-This is a Laravel adapter/bridge package for [zlodes/prometheus-exporter](https://github.com/zlodes/php-prometheus-exporter).
-
-Now it still doesn't support Summary.
-
-> **Warning**
-> This package is still in development. Use it on your own risk until 1.0.0 release.
+This is a Laravel adapter/bridge package for [zlodes/prometheus-client](https://github.com/zlodes/php-prometheus-client).
 
 ## First steps
 
@@ -25,7 +20,7 @@ Example:
 
 ```php
 use Illuminate\Support\Facades\Route;
-use Zlodes\PrometheusExporter\Laravel\Http\MetricsExporterController;
+use Zlodes\PrometheusClient\Laravel\Http\MetricsExporterController;
 
 Route::get('/metrics', MetricsExporterController::class);
 ```
@@ -62,7 +57,7 @@ $this->callAfterResolving(Registry::class, static function (Registry $registry):
 You can work with your metrics whenever you want. Just use `Collector`: 
 
 ```php
-use Zlodes\PrometheusExporter\Collector\CollectorFactory;
+use Zlodes\PrometheusClient\Collector\CollectorFactory;
 
 class DummyController
 {

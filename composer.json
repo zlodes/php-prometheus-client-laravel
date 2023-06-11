@@ -1,6 +1,6 @@
 {
-  "name": "zlodes/prometheus-exporter-laravel",
-  "description": "The Prometheus Metrics exporter adapter for Laravel Framework",
+  "name": "zlodes/prometheus-client-laravel",
+  "description": "The Prometheus Metrics client adapter for Laravel Framework",
   "license": "MIT",
   "type": "library",
   "authors": [
@@ -14,7 +14,7 @@
     "ext-redis": "*",
     "laravel/framework": "^9.0 || ^10.0",
     "webmozart/assert": "^1.11",
-    "zlodes/prometheus-exporter": "^0.8.0"
+    "zlodes/prometheus-exporter": "^0.9.1"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",
@@ -35,12 +35,12 @@
   "minimum-stability": "beta",
   "autoload": {
     "psr-4": {
-      "Zlodes\\PrometheusExporter\\Laravel\\": "src/"
+      "Zlodes\\PrometheusClient\\Laravel\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Zlodes\\PrometheusExporter\\Laravel\\Tests\\": "tests/"
+      "Zlodes\\PrometheusClient\\Laravel\\Tests\\": "tests/"
     }
   },
   "config": {

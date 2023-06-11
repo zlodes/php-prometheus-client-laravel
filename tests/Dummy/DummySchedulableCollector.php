@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\Dummy;
+namespace Zlodes\PrometheusClient\Laravel\Tests\Dummy;
 
-use Zlodes\PrometheusExporter\Collector\Collector;
-use Zlodes\PrometheusExporter\Laravel\ScheduledCollector\SchedulableCollector;
+use Zlodes\PrometheusClient\Collector\Collector;
+use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollector;
 
 final class DummySchedulableCollector implements SchedulableCollector
 {

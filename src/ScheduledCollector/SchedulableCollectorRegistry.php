@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\ScheduledCollector;
+namespace Zlodes\PrometheusClient\Laravel\ScheduledCollector;
 
 interface SchedulableCollectorRegistry
 {

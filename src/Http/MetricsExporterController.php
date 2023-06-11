@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Http;
+namespace Zlodes\PrometheusClient\Laravel\Http;
 
 use Illuminate\Http\Response;
-use Zlodes\PrometheusExporter\Exporter\Exporter;
+use Zlodes\PrometheusClient\Exporter\Exporter;
 
 final class MetricsExporterController
 {

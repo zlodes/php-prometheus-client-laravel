@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Exceptions;
+namespace Zlodes\PrometheusClient\Laravel\Exception;
 
 use RuntimeException;
 

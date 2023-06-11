@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\Storage;
+namespace Zlodes\PrometheusClient\Laravel\Tests\Storage;
 
 use Illuminate\Contracts\Redis\Connection;
 use Mockery;
@@ -10,15 +10,15 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Orchestra\Testbench\TestCase;
 use RedisException;
 use RuntimeException;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeySerializationException;
-use Zlodes\PrometheusExporter\Exceptions\MetricKeyUnserializationException;
-use Zlodes\PrometheusExporter\Exceptions\StorageReadException;
-use Zlodes\PrometheusExporter\Exceptions\StorageWriteException;
-use Zlodes\PrometheusExporter\KeySerialization\Serializer;
-use Zlodes\PrometheusExporter\Laravel\Storage\RedisStorage;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricNameWithLabels;
-use Zlodes\PrometheusExporter\Storage\DTO\MetricValue;
-use Zlodes\PrometheusExporter\Storage\StorageTesting;
+use Zlodes\PrometheusClient\Exceptions\MetricKeySerializationException;
+use Zlodes\PrometheusClient\Exceptions\MetricKeyUnserializationException;
+use Zlodes\PrometheusClient\Exceptions\StorageReadException;
+use Zlodes\PrometheusClient\Exceptions\StorageWriteException;
+use Zlodes\PrometheusClient\KeySerialization\Serializer;
+use Zlodes\PrometheusClient\Laravel\Storage\RedisStorage;
+use Zlodes\PrometheusClient\Storage\DTO\MetricNameWithLabels;
+use Zlodes\PrometheusClient\Storage\DTO\MetricValue;
+use Zlodes\PrometheusClient\Storage\StorageTesting;
 
 class RedisStorageTest extends TestCase
 {

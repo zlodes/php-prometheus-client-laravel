@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zlodes\PrometheusExporter\Laravel\Tests\Commands;
+namespace Zlodes\PrometheusClient\Laravel\Tests\Commands;
 
 use Generator;
 use Mockery;
 use Orchestra\Testbench\TestCase;
-use Zlodes\PrometheusExporter\Laravel\ServiceProvider;
-use Zlodes\PrometheusExporter\MetricTypes\Counter;
-use Zlodes\PrometheusExporter\Registry\Registry;
+use Zlodes\PrometheusClient\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\MetricTypes\Counter;
+use Zlodes\PrometheusClient\Registry\Registry;
 
 class ListMetricsTest extends TestCase
 {

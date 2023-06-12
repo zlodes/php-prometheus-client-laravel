@@ -54,7 +54,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Zlodes\\PrometheusExporter\\Laravel\\ServiceProvider"
+        "Zlodes\\PrometheusClient\\Laravel\\ServiceProvider"
       ]
     }
   },

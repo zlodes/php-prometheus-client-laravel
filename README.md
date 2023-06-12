@@ -9,7 +9,7 @@ This is a Laravel adapter/bridge package for [zlodes/prometheus-client](https://
 ### Installation 
 
 ```shell
-composer require zlodes/prometheus-exporter-laravel
+composer require zlodes/prometheus-client-laravel
 ```
 
 ### Register a route for the metrics controller

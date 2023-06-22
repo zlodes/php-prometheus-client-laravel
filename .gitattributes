@@ -10,3 +10,5 @@
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
 /phpstan.neon       export-ignore
+/.releaserc.json    export-ignore
+/.cspell.json       export-ignore

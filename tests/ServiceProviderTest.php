@@ -11,7 +11,9 @@ use Zlodes\PrometheusClient\Exporter\Exporter;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
 use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
 use Zlodes\PrometheusClient\Laravel\ServiceProvider;
+use Zlodes\PrometheusClient\Laravel\Storage\RedisStorage;
 use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\NullStorage;
 use Zlodes\PrometheusClient\Storage\Storage;
 
 class ServiceProviderTest extends TestCase
@@ -56,6 +58,22 @@ class ServiceProviderTest extends TestCase
         }
 
         self::assertTrue($found);
+    }
+
+    public function testDefaultStorageIsRedis(): void
+    {
+        $storage = $this->app->make(Storage::class);
+
+        self::assertInstanceOf(RedisStorage::class, $storage);
+    }
+
+    public function testMetricsDisabled(): void
+    {
+        config()->set('prometheus-exporter.enabled', false);
+
+        $storage = $this->app->make(Storage::class);
+
+        self::assertInstanceOf(NullStorage::class, $storage);
     }
 
     protected function getPackageProviders($app): array

@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 return [
     /**
+     * If disabled, the NullStorage will be used
+     */
+    'enabled' => (bool) env('PROMETHEUS_CLIENT_ENABLED', true),
+
+    /**
      * Here you can configure a Storage for metrics
      *
      * Available options:

@@ -14,7 +14,7 @@
     "ext-redis": "*",
     "laravel/framework": "^9.0 || ^10.0",
     "webmozart/assert": "^1.11",
-    "zlodes/prometheus-client": "^1.0"
+    "zlodes/prometheus-client": "^1.1"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",

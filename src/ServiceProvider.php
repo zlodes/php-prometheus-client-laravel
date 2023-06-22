@@ -21,6 +21,7 @@ use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorArray
 use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
 use Zlodes\PrometheusClient\Registry\ArrayRegistry;
 use Zlodes\PrometheusClient\Registry\Registry;
+use Zlodes\PrometheusClient\Storage\NullStorage;
 use Zlodes\PrometheusClient\Storage\Storage;
 
 final class ServiceProvider extends BaseServiceProvider
@@ -58,6 +59,13 @@ final class ServiceProvider extends BaseServiceProvider
         $this->app->singleton(Storage::class, static function (Application $app): Storage {
             /** @var Repository $config */
             $config = $app->make(Repository::class);
+
+            $clientEnabled = $config->get('prometheus-exporter.enabled') ?? true;
+            Assert::boolean($clientEnabled);
+
+            if ($clientEnabled === false) {
+                return new NullStorage();
+            }
 
             /** @psalm-var class-string<Storage> $storageClass */
             $storageClass = $config->get('prometheus-exporter.storage');

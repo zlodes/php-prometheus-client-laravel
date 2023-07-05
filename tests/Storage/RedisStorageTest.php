@@ -52,7 +52,7 @@ class RedisStorageTest extends TestCase
         iterator_to_array($storage->fetch());
     }
 
-    public function testNormalizationExceptionWhileFetch(): void
+    public function testUnserializationExceptionWhileFetch(): void
     {
         $storage = new RedisStorage(
             $connectionMock = Mockery::mock(Connection::class),
@@ -153,7 +153,7 @@ class RedisStorageTest extends TestCase
         );
     }
 
-    public function testDenormalizationExceptionWhileSettingValue(): void
+    public function testSerializationExceptionWhileSettingValue(): void
     {
         $storage = new RedisStorage(
             Mockery::mock(Connection::class),

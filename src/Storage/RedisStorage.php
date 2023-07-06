@@ -43,9 +43,13 @@ final class RedisStorage implements Storage
             $this->connection->command('DEL', [self::SIMPLE_HASH_NAME]);
             $this->connection->command('DEL', [self::HISTOGRAM_SUM_HASH_NAME]);
             $this->connection->command('DEL', [self::HISTOGRAM_COUNT_HASH_NAME]);
+
+            // Using leading asterisk to ignore Laravel Redis connection prefix (like laravel_database_)
+            $histogramKeyPattern = ['*' . self::HISTOGRAM_HASH_NAME_PREFIX . '*'];
+
             $this->connection->command('EVAL', [
-                "return redis.call('del', unpack(redis.call('keys', KEYS[1])))",
-                [self::HISTOGRAM_HASH_NAME_PREFIX],
+                "return redis.call('del', unpack(redis.call('keys', ARGV[1])))",
+                $histogramKeyPattern,
                 0,
             ]);
         } catch (Exception $e) {

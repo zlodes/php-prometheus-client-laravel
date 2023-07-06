@@ -35,6 +35,35 @@ class RedisStorageTest extends TestCase
         $redis->command('FLUSHALL');
     }
 
+    public function testClear(): void
+    {
+        /** @var Connection $redis */
+        $redis = $this->app->make(Connection::class);
+
+        $storage = $this->app->make(RedisStorage::class, [
+            'connection' => $redis,
+        ]);
+
+        $storage->setValue(new MetricValue(
+            new MetricNameWithLabels('foo', []),
+            42,
+        ));
+
+        $storage->persistHistogram(
+            new MetricValue(
+                new MetricNameWithLabels('bar'),
+                0.5,
+            ),
+            [0.1, 0.2, 0.3]
+        );
+
+        $storage->clear();
+
+        $keys = $redis->command('KEYS', ['*']);
+
+        self::assertEquals([], $keys);
+    }
+
     public function testRedisExceptionWhileFetch(): void
     {
         $storage = new RedisStorage(

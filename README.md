@@ -94,15 +94,6 @@ $this->callAfterResolving(
 | `php artisan metrics:clear` | Clears metrics storage                         |
 | `metrics:collect-scheduled` | Runs `ScheduledCollectors`. Using by Scheduler |
 
-
-## Roadmap
-
-- [x] Scheduled Collectors by config
-- [x] Document Scheduled collectors
-- [x] Configure Semantic Release for GitHub Actions
-- [ ] Ability to disable Scheduled tasks
-- [ ] Convert the roadmap to issues
-
 ## Testing
 
 ### Run tests

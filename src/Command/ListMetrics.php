@@ -28,6 +28,7 @@ final class ListMetrics extends Command
                 $counter,
                 $metric->getName(),
                 $metric->getType()->value,
+                $metric->getHelp(),
                 json_encode($metric->getInitialLabels(), JSON_THROW_ON_ERROR | JSON_FORCE_OBJECT),
             ];
         }
@@ -36,6 +37,7 @@ final class ListMetrics extends Command
             '#',
             'Name',
             'Type',
+            'Help',
             'Initial tags',
         ];
 

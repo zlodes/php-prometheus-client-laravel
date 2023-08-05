@@ -38,7 +38,7 @@ final class ListMetrics extends Command
             'Name',
             'Type',
             'Help',
-            'Initial tags',
+            'Initial labels',
         ];
 
         $this->table($tableHeader, $metrics);

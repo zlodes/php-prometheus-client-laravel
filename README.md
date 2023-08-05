@@ -84,7 +84,7 @@ $this->callAfterResolving(
 ```
 
 > **Note**
-> For further details, see [zlodes/prometheus-exporter](https://github.com/zlodes/php-prometheus-exporter)
+> For further details, see [zlodes/prometheus-client](https://github.com/zlodes/php-prometheus-client)
 
 ### Available console commands
 

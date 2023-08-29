@@ -9,6 +9,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Webmozart\Assert\Assert;
+use Zlodes\PrometheusClient\Collector\CollectorFactory;
 use Zlodes\PrometheusClient\Exporter\Exporter;
 use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
 use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
@@ -30,6 +31,7 @@ final class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/prometheus-exporter.php', 'prometheus-exporter');
 
+        $this->app->singleton(CollectorFactory::class);
         $this->app->singleton(Registry::class, ArrayRegistry::class);
         $this->app->singleton(Exporter::class, StoredMetricsExporter::class);
 

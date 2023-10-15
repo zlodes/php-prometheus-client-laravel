@@ -11,7 +11,9 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Webmozart\Assert\Assert;
 use Zlodes\PrometheusClient\Collector\CollectorFactory;
 use Zlodes\PrometheusClient\Exporter\Exporter;
-use Zlodes\PrometheusClient\Exporter\StoredMetricsExporter;
+use Zlodes\PrometheusClient\Exporter\FetcherExporter;
+use Zlodes\PrometheusClient\Fetcher\Fetcher;
+use Zlodes\PrometheusClient\Fetcher\StoredMetricsFetcher;
 use Zlodes\PrometheusClient\KeySerialization\JsonSerializer;
 use Zlodes\PrometheusClient\KeySerialization\Serializer;
 use Zlodes\PrometheusClient\Laravel\Command\ClearMetrics;
@@ -20,28 +22,27 @@ use Zlodes\PrometheusClient\Laravel\Command\ScheduledCollect;
 use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollector;
 use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorArrayRegistry;
 use Zlodes\PrometheusClient\Laravel\ScheduledCollector\SchedulableCollectorRegistry;
+use Zlodes\PrometheusClient\Laravel\Storage\StorageConfigurator;
 use Zlodes\PrometheusClient\Registry\ArrayRegistry;
 use Zlodes\PrometheusClient\Registry\Registry;
-use Zlodes\PrometheusClient\Storage\NullStorage;
-use Zlodes\PrometheusClient\Storage\Storage;
 
 final class ServiceProvider extends BaseServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/prometheus-exporter.php', 'prometheus-exporter');
+        $this->mergeConfigFrom(__DIR__ . '/../config/prometheus-client.php', 'prometheus-client');
 
         $this->app->singleton(CollectorFactory::class);
         $this->app->singleton(Registry::class, ArrayRegistry::class);
-        $this->app->singleton(Exporter::class, StoredMetricsExporter::class);
+        $this->app->singleton(Fetcher::class, StoredMetricsFetcher::class);
+        $this->app->singleton(Exporter::class, FetcherExporter::class);
 
         $this->app->singleton(Serializer::class, JsonSerializer::class);
 
-        $this->registerStorage();
         $this->registerSchedulableCollectors();
     }
 
-    public function boot(): void
+    public function boot(StorageConfigurator $storageConfigurator): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -51,34 +52,11 @@ final class ServiceProvider extends BaseServiceProvider
             ]);
 
             $this->publishes([
-                __DIR__ . '/../config/prometheus-exporter.php' => config_path('prometheus-exporter.php'),
-            ], 'prometheus-exporter');
+                __DIR__ . '/../config/prometheus-client.php' => config_path('prometheus-client.php'),
+            ], 'prometheus-client');
         }
-    }
 
-    private function registerStorage(): void
-    {
-        $this->app->singleton(Storage::class, static function (Application $app): Storage {
-            /** @var Repository $config */
-            $config = $app->make(Repository::class);
-
-            $clientEnabled = $config->get('prometheus-exporter.enabled') ?? true;
-            Assert::boolean($clientEnabled);
-
-            if ($clientEnabled === false) {
-                return new NullStorage();
-            }
-
-            /** @psalm-var class-string<Storage> $storageClass */
-            $storageClass = $config->get('prometheus-exporter.storage');
-            Assert::true(
-                is_a($storageClass, Storage::class, true),
-                'Config value in prometheus-exporter.storage must be a class-string<Storage>'
-            );
-
-            /** @var Storage */
-            return $app->make($storageClass);
-        });
+        $storageConfigurator->configure();
     }
 
     private function registerSchedulableCollectors(): void
@@ -92,7 +70,7 @@ final class ServiceProvider extends BaseServiceProvider
                 $config = $app->make(Repository::class);
 
                 /** @psalm-var list<class-string<SchedulableCollector>> $collectors */
-                $collectors = $config->get('prometheus-exporter.schedulable_collectors');
+                $collectors = $config->get('prometheus-client.schedulable_collectors');
                 Assert::allStringNotEmpty($collectors);
 
                 foreach ($collectors as $collectorClass) {

@@ -14,7 +14,9 @@ composer require zlodes/prometheus-client-laravel
 
 ### Register a route for the metrics controller
 
-Your application is responsible for metrics route registration. There is a ready to use [controller](src/Http/MetricsExporterController.php). You can configure groups, middleware or prefixes as you want.
+Your application is responsible for metrics route registration. 
+There is a [controller](src/Http/MetricsExporterController.php) ready to use. 
+You can configure groups, middleware or prefixes as you want.
 
 Example:
 
@@ -25,14 +27,15 @@ use Zlodes\PrometheusClient\Laravel\Http\MetricsExporterController;
 Route::get('/metrics', MetricsExporterController::class);
 ```
 
-### Configure a Storage for metrics [optional]
+### Configure Storage for metrics [optional]
 
-By-default, it uses [RedisStorage](src/Storage/RedisStorage.php). If you want to use other storage, you can do it easily following these three steps:
+By default, it uses Redis storage. 
+If you want to use other storage, you can do it easily following these three steps:
 
 1. Create a class implements `Storage` interface.
 2. Publish a config:
    ```shell
-   php artisan vendor:publish --tag=prometheus-exporter
+   php artisan vendor:publish --tag=prometheus-client
    ```
 3. Set your `storage` class in the config.
 
@@ -93,6 +96,14 @@ $this->callAfterResolving(
 | `php artisan metrics:list`  | Lists all registered metrics                   |
 | `php artisan metrics:clear` | Clears metrics storage                         |
 | `metrics:collect-scheduled` | Runs `ScheduledCollectors`. Using by Scheduler |
+
+## Upgrade guide
+
+### From 1.x to 2.x
+
+1. Run `php artisan vendor:publish --tag=prometheus-client` to publish a brand-new config
+2. Configure the new config based on the previous one (`prometheus-exporter.php`)
+3. Drop legacy config (`prometheus-exporter.php`)
 
 ## Testing
 

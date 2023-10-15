@@ -24,7 +24,7 @@ final class SchedulableCollectorsProvidedByConfigTest extends TestCase
     public function testConfigWithCorrectValues(): void
     {
         config([
-            'prometheus-exporter.schedulable_collectors' => [
+            'prometheus-client.schedulable_collectors' => [
                 DummySchedulableCollector::class,
             ],
         ]);
@@ -38,7 +38,7 @@ final class SchedulableCollectorsProvidedByConfigTest extends TestCase
     public function testConfigWithWrongValues(): void
     {
         config([
-            'prometheus-exporter.schedulable_collectors' => [
+            'prometheus-client.schedulable_collectors' => [
                 DummySchedulableCollector::class, // valid
                 Model::class, // invalid
             ],

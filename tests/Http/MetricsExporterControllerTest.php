@@ -29,10 +29,10 @@ class MetricsExporterControllerTest extends TestCase
                 yield 'baz';
             });
 
-        Route::get('/super-metrics', MetricsExporterController::class);
+        Route::get('/metrics', MetricsExporterController::class);
 
         $this
-            ->get('/super-metrics')
+            ->get('/metrics')
             ->assertOk()
             ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
             ->assertSee('foo')

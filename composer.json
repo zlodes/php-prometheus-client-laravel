@@ -14,7 +14,7 @@
     "ext-redis": "*",
     "laravel/framework": "^9.0 || ^10.0",
     "webmozart/assert": "^1.11",
-    "zlodes/prometheus-client": "2.x-dev"
+    "zlodes/prometheus-client": "^2.0.0"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "dev-main",
@@ -45,8 +45,8 @@
   },
   "config": {
     "allow-plugins": {
-      "ergebnis/composer-normalize": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
+      "ergebnis/composer-normalize": true,
       "phpstan/extension-installer": true
     },
     "sort-packages": true

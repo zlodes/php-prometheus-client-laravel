@@ -9,14 +9,10 @@ return [
     'enabled' => (bool) env('PROMETHEUS_CLIENT_ENABLED', true),
 
     /**
-     * Here you can configure a Storage for metrics
-     *
-     * Available options:
-     * - \Zlodes\PrometheusClient\Storage\InMemoryStorage::class
-     * - \Zlodes\PrometheusClient\Laravel\Storage\RedisStorage::class
-     * - Your own storage implements Storage interface
+     * Here you can configure a Storage for metrics.
+     * Available options: "null", "in_memory", "redis"
      */
-    'storage' => \Zlodes\PrometheusClient\Laravel\Storage\RedisStorage::class,
+    'storage' => env('PROMETHEUS_CLIENT_STORAGE', 'redis'),
 
     /**
      * Here you can specify a list of your SchedulableCollectors

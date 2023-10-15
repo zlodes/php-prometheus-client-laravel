@@ -7,19 +7,39 @@ namespace Zlodes\PrometheusClient\Laravel\Tests\Commands;
 use Mockery;
 use Orchestra\Testbench\TestCase;
 use Zlodes\PrometheusClient\Laravel\ServiceProvider;
-use Zlodes\PrometheusClient\Storage\Storage;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
 
 class ClearMetricsTest extends TestCase
 {
     public function testCommandRun(): void
     {
         $this->app->instance(
-            Storage::class,
-            $storageMock = Mockery::mock(Storage::class),
+            CounterStorage::class,
+            $counterStorageMock = Mockery::mock(CounterStorage::class),
         );
 
-        $storageMock
-            ->expects('clear');
+        $this->app->instance(
+            GaugeStorage::class,
+            $gaugeStorageMock = Mockery::mock(GaugeStorage::class),
+        );
+
+        $this->app->instance(
+            HistogramStorage::class,
+            $histogramStorageMock = Mockery::mock(HistogramStorage::class),
+        );
+
+        $this->app->instance(
+            SummaryStorage::class,
+            $summaryStorageMock = Mockery::mock(SummaryStorage::class),
+        );
+
+        $counterStorageMock->expects('clearCounters');
+        $gaugeStorageMock->expects('clearGauges');
+        $histogramStorageMock->expects('clearHistograms');
+        $summaryStorageMock->expects('clearSummaries');
 
         $this
             ->artisan('metrics:clear')

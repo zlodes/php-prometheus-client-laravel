@@ -128,10 +128,6 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
         <properties>
             <property name="allowSingleLineYieldStacking" value="false"/>
-            <property name="linesCountBeforeControlStructure" value="1"/>
-            <property name="linesCountBeforeFirstControlStructure" value="0"/>
-            <property name="linesCountAfterControlStructure" value="0"/>
-            <property name="linesCountAfterLastControlStructure" value="0"/>
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
@@ -139,8 +135,6 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
         <properties>
             <property name="lineLengthLimit" value="120"/>
-            <property name="ignoreComments" value="true" />
-            <property name="ignoreImports" value="true" />
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
@@ -254,7 +248,7 @@
                 <element value="@mixin"/>
                 <element value="@codeCoverageIgnore,@deprecated"/>
                 <element value="@template,@psalm-template,@psalm-type,@psalm-import-type" />
-                <element value="@internal,@psalm-internal,@psalm-immutable" />
+                <element value="@internal,@final,@psalm-internal,@psalm-immutable" />
                 <element value="@no-named-arguments" />
                 <element value="@inheritDoc"/>
                 <element value="@property\"/>
@@ -348,7 +342,7 @@
     <rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
         <properties>
             <property name="minDigitsBeforeDecimalPoint" value="5"/>
-            <property name="minDigitsAfterDecimalPoint" value="3"/>
+            <property name="minDigitsAfterDecimalPoint" value="5"/>
             <property name="ignoreOctalNumbers" value="true"/>
         </properties>
     </rule>

@@ -24,8 +24,8 @@ jobs:
         with:
           node-version: "lts/*"
       - name: Dependencies
-        run: npm i --no-save semantic-release @commitlint/config-conventional @semantic-release/changelog @semantic-release/git @semantic-release/exec @semantic-release/github
+        run: npm i --no-save semantic-release conventional-changelog-conventionalcommits @commitlint/config-conventional @semantic-release/changelog @semantic-release/git @semantic-release/exec @semantic-release/github -D
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: npx semantic-release@24.0.0-beta.2

@@ -52,13 +52,24 @@ final class HistogramRedisStorage implements HistogramStorage
             }
         }
 
-        // TODO: Might be optimized by using EVAL with prepared LUA script. We have to add a performance test for this.
-        $this->connection->command('HINCRBY', [self::HISTOGRAM_COUNT_HASH_NAME, $keyWithLabels, 1]);
-        $this->connection->command('HINCRBYFLOAT', [self::HISTOGRAM_SUM_HASH_NAME, $keyWithLabels, $command->value]);
-
-        foreach ($bucketsToUpdate as $bucket) {
-            $this->connection->command('HINCRBY', [$metricHashName, $bucket, 1]);
-        }
+        $this->connection->command('EVAL', [
+            <<<LUA
+            redis.call('HINCRBY', KEYS[1], ARGV[1], 1);
+            redis.call('HINCRBYFLOAT', KEYS[2], ARGV[1], ARGV[2]);
+            for i = 3, #ARGV do
+                redis.call('HINCRBY', KEYS[3], ARGV[i], 1)
+            end
+            LUA,
+            [
+                self::HISTOGRAM_COUNT_HASH_NAME,
+                self::HISTOGRAM_SUM_HASH_NAME,
+                $metricHashName,
+                $keyWithLabels,
+                $command->value,
+                ...$bucketsToUpdate,
+            ],
+            3,
+        ]);
     }
 
     public function fetchHistograms(): iterable

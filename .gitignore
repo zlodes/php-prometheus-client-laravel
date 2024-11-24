@@ -6,3 +6,6 @@ composer.lock
 phpunit.xml
 .phpunit.result.cache
 junit.xml
+
+# PHPBench
+.phpbench/

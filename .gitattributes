@@ -13,3 +13,4 @@
 /phpstan.neon       export-ignore
 /.releaserc.json    export-ignore
 /.cspell.json       export-ignore
+/phpbench.json     export-ignore

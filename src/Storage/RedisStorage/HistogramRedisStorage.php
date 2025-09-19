@@ -116,7 +116,7 @@ final class HistogramRedisStorage implements HistogramStorage
                 sprintf(
                     'Buckets with values is empty for [%s] metric with [%s] labels',
                     $keyWithLabels->metricName,
-                    implode(', ', $keyWithLabels->labels)
+                    json_encode($keyWithLabels->labels)
                 )
             );
             $bucketsWithValues = array_map('floatval', $bucketsWithValues);

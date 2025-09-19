@@ -111,7 +111,14 @@ final class HistogramRedisStorage implements HistogramStorage
                 );
             }
 
-            Assert::notEmpty($bucketsWithValues);
+            Assert::notEmpty(
+                $bucketsWithValues,
+                sprintf(
+                    'Buckets with values is empty for [%s] metric with [%s] labels',
+                    $keyWithLabels->metricName,
+                    implode(', ', $keyWithLabels->labels)
+                )
+            );
             $bucketsWithValues = array_map('floatval', $bucketsWithValues);
 
             yield new HistogramMetricValue(

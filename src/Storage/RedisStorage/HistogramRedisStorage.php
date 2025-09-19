@@ -114,9 +114,9 @@ final class HistogramRedisStorage implements HistogramStorage
             Assert::notEmpty(
                 $bucketsWithValues,
                 sprintf(
-                    'Buckets with values are empty for [%s] metric with [%s] labels',
+                    'Buckets with values are empty for [%s] metric with key [%s]',
                     $keyWithLabels->metricName,
-                    json_encode($keyWithLabels->labels)
+                    $this->metricKeySerializer->serialize($keyWithLabels),
                 )
             );
             $bucketsWithValues = array_map('floatval', $bucketsWithValues);

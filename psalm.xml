@@ -20,6 +20,7 @@
     <issueHandlers>
         <MissingPureAnnotation errorLevel="suppress"/>
         <MissingImmutableAnnotation errorLevel="suppress"/>
+        <MissingInterfaceImmutableAnnotation errorLevel="suppress"/>
         <MissingAbstractPureAnnotation errorLevel="suppress"/>
     </issueHandlers>
 

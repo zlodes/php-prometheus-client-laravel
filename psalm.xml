@@ -17,6 +17,12 @@
         </ignoreFiles>
     </projectFiles>
 
+    <issueHandlers>
+        <MissingPureAnnotation errorLevel="suppress"/>
+        <MissingImmutableAnnotation errorLevel="suppress"/>
+        <MissingAbstractPureAnnotation errorLevel="suppress"/>
+    </issueHandlers>
+
     <plugins>
         <pluginClass class="Psalm\LaravelPlugin\Plugin"/>
     </plugins>

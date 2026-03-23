@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Zlodes\PrometheusClient\Laravel\ScheduledCollector;
 
+/**
+ * @psalm-mutable
+ */
 interface SchedulableCollectorRegistry
 {
     /**

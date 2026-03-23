@@ -6,9 +6,6 @@ namespace Zlodes\PrometheusClient\Laravel\ScheduledCollector;
 
 use Zlodes\PrometheusClient\Laravel\Exception\CannotCollectScheduledMetrics;
 
-/**
- * @psalm-immutable
- */
 interface SchedulableCollector
 {
     /**

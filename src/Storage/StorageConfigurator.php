@@ -55,9 +55,9 @@ final class StorageConfigurator
      * Registers (or overrides) a storage driver with a custom set of storage implementations.
      *
      * @param non-empty-string $driverName
-     * @param array<class-string, class-string> $storages Storage contract => implementation
+     * @param array<class-string, class-string> $implementations Storage contract => implementation
      */
-    public function extend(string $driverName, array $storages): self
+    public function extend(string $driverName, array $implementations): self
     {
         Assert::stringNotEmpty($driverName);
         Assert::notEq(
@@ -75,13 +75,13 @@ final class StorageConfigurator
 
         foreach ($requiredContracts as $contract) {
             Assert::keyExists(
-                $storages,
+                $implementations,
                 $contract,
                 "Missing a storage implementation for the '$contract' contract "
                 . "while extending '$driverName' driver."
             );
 
-            $implementation = $storages[$contract];
+            $implementation = $implementations[$contract];
 
             Assert::true(
                 is_a($implementation, $contract, true),
@@ -89,7 +89,7 @@ final class StorageConfigurator
             );
         }
 
-        $this->storages[$driverName] = $storages;
+        $this->storages[$driverName] = $implementations;
 
         return $this;
     }

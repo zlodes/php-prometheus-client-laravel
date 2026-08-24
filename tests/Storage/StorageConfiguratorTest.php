@@ -16,9 +16,31 @@ use Zlodes\PrometheusClient\Storage\InMemory\InMemoryCounterStorage;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemoryGaugeStorage;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemoryHistogramStorage;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemorySummaryStorage;
+use Zlodes\PrometheusClient\Storage\NullStorage;
 
 class StorageConfiguratorTest extends TestCase
 {
+    public function testExtendOverridesBuiltInDriver(): void
+    {
+        $configurator = $this->app->make(StorageConfigurator::class);
+
+        $configurator->extend('in_memory', [
+            CounterStorage::class => NullStorage::class,
+            GaugeStorage::class => NullStorage::class,
+            HistogramStorage::class => NullStorage::class,
+            SummaryStorage::class => NullStorage::class,
+        ]);
+
+        config()->set('prometheus-client.storage', 'in_memory');
+
+        $configurator->configure();
+
+        self::assertInstanceOf(NullStorage::class, $this->app->make(CounterStorage::class));
+        self::assertInstanceOf(NullStorage::class, $this->app->make(GaugeStorage::class));
+        self::assertInstanceOf(NullStorage::class, $this->app->make(HistogramStorage::class));
+        self::assertInstanceOf(NullStorage::class, $this->app->make(SummaryStorage::class));
+    }
+
     public function testExtendRegistersCustomDriver(): void
     {
         $configurator = $this->app->make(StorageConfigurator::class);

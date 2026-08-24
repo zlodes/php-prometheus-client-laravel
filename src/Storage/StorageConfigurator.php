@@ -21,9 +21,6 @@ use Zlodes\PrometheusClient\Storage\InMemory\InMemoryHistogramStorage;
 use Zlodes\PrometheusClient\Storage\InMemory\InMemorySummaryStorage;
 use Zlodes\PrometheusClient\Storage\NullStorage;
 
-/**
- * TODO: Add an ability to extend the configurator
- */
 final class StorageConfigurator
 {
     /** @var non-empty-array<non-empty-string, array<string, class-string>> */
@@ -54,12 +51,62 @@ final class StorageConfigurator
     ) {
     }
 
+    /**
+     * Registers (or overrides) a storage driver with a custom set of storage implementations.
+     *
+     * @param non-empty-string $driverName
+     * @param array<class-string, class-string> $storages Storage contract => implementation
+     */
+    public function extend(string $driverName, array $storages): self
+    {
+        Assert::stringNotEmpty($driverName);
+        Assert::notEq(
+            $driverName,
+            'null',
+            'The "null" driver name is reserved and cannot be overridden.',
+        );
+
+        $requiredContracts = [
+            CounterStorage::class,
+            GaugeStorage::class,
+            HistogramStorage::class,
+            SummaryStorage::class,
+        ];
+
+        foreach ($requiredContracts as $contract) {
+            Assert::keyExists(
+                $storages,
+                $contract,
+                "Missing a storage implementation for the '$contract' contract "
+                . "while extending '$driverName' driver."
+            );
+
+            $implementation = $storages[$contract];
+
+            Assert::true(
+                is_a($implementation, $contract, true),
+                "The implementation '$implementation' for the '$driverName' driver must implement '$contract'."
+            );
+        }
+
+        $this->storages[$driverName] = $storages;
+
+        return $this;
+    }
+
     public function configure(): void
     {
         $driverName = $this->getDriverName();
 
         $driverConfiguration = $this->storages[$driverName] ?? null;
-        Assert::notNull($driverConfiguration);
+        Assert::notNull(
+            $driverConfiguration,
+            sprintf(
+                'Unknown storage driver "%s". Known drivers are: %s.',
+                $driverName,
+                implode(', ', array_keys($this->storages)),
+            )
+        );
 
         foreach ($driverConfiguration as $interface => $implementation) {
             $this->app->singleton($interface, $implementation);

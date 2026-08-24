@@ -29,15 +29,51 @@ Route::get('/metrics', MetricsExporterController::class);
 
 ### Configure Storage for metrics [optional]
 
-By default, it uses Redis storage. 
-If you want to use other storage, you can do it easily following these three steps:
+By default, it uses Redis storage.
 
-1. Create a class implements `Storage` interface.
-2. Publish a config:
-   ```shell
-   php artisan vendor:publish --tag=prometheus-client
-   ```
-3. Set your `storage` class in the config.
+If you want to use a different storage backend (e.g. a custom driver shipped by your application), register it
+by extending the `StorageConfigurator` in your own `ServiceProvider::register()`:
+
+```php
+use Zlodes\PrometheusClient\Laravel\Storage\StorageConfigurator;
+use Zlodes\PrometheusClient\Storage\Contracts\CounterStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\GaugeStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\HistogramStorage;
+use Zlodes\PrometheusClient\Storage\Contracts\SummaryStorage;
+
+// your ServiceProvider::register()
+$this->callAfterResolving(
+    StorageConfigurator::class,
+    static function (StorageConfigurator $configurator): void {
+        $configurator->extend('my_driver', [
+            CounterStorage::class => MyCounterStorage::class,
+            GaugeStorage::class => MyGaugeStorage::class,
+            HistogramStorage::class => MyHistogramStorage::class,
+            SummaryStorage::class => MySummaryStorage::class,
+        ]);
+    }
+);
+```
+
+Then publish the config and select your driver:
+
+```shell
+php artisan vendor:publish --tag=prometheus-client
+```
+
+```dotenv
+PROMETHEUS_CLIENT_STORAGE=my_driver
+```
+
+`callAfterResolving` is the right hook here: this package's `ServiceProvider::boot()` asks the container to resolve
+`StorageConfigurator` as part of its method signature, which runs your registered callback first, and only after
+that does `boot()` call `$storageConfigurator->configure()`. This guarantees your custom driver is registered
+before the storage bindings are resolved.
+
+All four storage contracts (`CounterStorage`, `GaugeStorage`, `HistogramStorage`, `SummaryStorage`) must be provided
+for a driver — `extend()` validates this, along with checking that each implementation actually satisfies its
+contract. The built-in `null` driver name is reserved (it backs the `enabled => false` kill switch) and cannot be
+overridden, but you can freely override `in_memory` or `redis` if you want to replace the built-in implementations.
 
 
 ## Metrics registration

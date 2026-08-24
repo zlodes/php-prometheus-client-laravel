@@ -39,6 +39,8 @@ final class ServiceProvider extends BaseServiceProvider
 
         $this->app->singleton(Serializer::class, JsonSerializer::class);
 
+        $this->app->singleton(StorageConfigurator::class);
+
         $this->registerSchedulableCollectors();
     }
 

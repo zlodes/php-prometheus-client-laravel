@@ -50,6 +50,14 @@ class ServiceProviderTest extends TestCase
         }
     }
 
+    public function testStorageConfiguratorIsSingleton(): void
+    {
+        $first = $this->app->make(StorageConfigurator::class);
+        $second = $this->app->make(StorageConfigurator::class);
+
+        self::assertSame($first, $second);
+    }
+
     public function testSchedule(): void
     {
         $schedule = $this->app->make(Schedule::class);

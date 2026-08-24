@@ -17,6 +17,7 @@ final class SchedulableCollectorArrayRegistry implements SchedulableCollectorReg
 
         $this->schedulableCollectors[] = $schedulableCollector;
 
+        /** @psalm-suppress RedundantCondition Psalm can't see this is a runtime uniqueness check, not a type check */
         Assert::uniqueValues($this->schedulableCollectors);
 
         return $this;
